@@ -49,6 +49,10 @@ class SettingsTableViewController: UITableViewController, UIAlertViewDelegate {
 		}
 	}
 	
+	@IBAction func touchIDSwitchChanged(sender: UISwitch) {
+		
+	}
+	
 	func showFirstAlert() {
 		alertNum = 1
 		let alert = UIAlertView(title: "Enter your old PIN", message: nil, delegate: self, cancelButtonTitle: "Enter")
@@ -87,6 +91,10 @@ class SettingsTableViewController: UITableViewController, UIAlertViewDelegate {
 		
 		if alertNum == 2 {
 			newPassword = alertView.textFieldAtIndex(0)!.text
+			if newPassword.characters.count < 4 {
+				showSecondAlert()
+				return
+			}
 			showThirdAlert()
 			return
 		}

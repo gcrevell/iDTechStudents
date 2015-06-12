@@ -31,10 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
 	func applicationWillEnterForeground(application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+		print("Foreground", appendNewline: true)
+		
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let login = storyboard.instantiateViewControllerWithIdentifier("LoginScreen")
+		
+		self.window?.rootViewController = login
+		
 	}
 
 	func applicationDidBecomeActive(application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+		print("active", appendNewline: true)
 	}
 
 	func applicationWillTerminate(application: UIApplication) {
