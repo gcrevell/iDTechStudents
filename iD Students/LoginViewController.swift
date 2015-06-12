@@ -23,6 +23,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertViewDel
 		
 		password = defaults.objectForKey("PASSWORD") as? String
 		
+		if defaults.valueForKey("USETOUCHID") == nil {
+			defaults.setBool(true, forKey: "USETOUCHID")
+			defaults.synchronize()
+		}
+		
 		let context = LAContext()
 		
 		if password == nil {
@@ -39,7 +44,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertViewDel
 			alert.alertViewStyle = UIAlertViewStyle.SecureTextInput
 			alert.textFieldAtIndex(0)?.keyboardType = UIKeyboardType.NumberPad
 			alert.show()
-		} else {
+		} else if defaults.valueForKey("USETOUCHID") as! Bool {
 			
 			do {
 				try context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics)
@@ -102,6 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertViewDel
 			let alert = UIAlertController(title: "Incorrect password", message: "Please try again", preferredStyle: UIAlertControllerStyle.Alert)
 			alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
 			self.presentViewController(alert, animated: true, completion: nil)
+			enteredPassword = ""
 		}
 	}
 	

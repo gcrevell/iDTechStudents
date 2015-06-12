@@ -46,7 +46,9 @@ class AddStudentViewController: UIViewController, NSFetchedResultsControllerDele
 		do {
 			try regex = NSRegularExpression(pattern: "^\\w+ \\w{1}$", options: NSRegularExpressionOptions.CaseInsensitive)
 		} catch {
-			
+			let nserror = error as NSError
+			NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+			abort()
 		}
 		
 		if nameTextField.text?.characters.count == 0 {
