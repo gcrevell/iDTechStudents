@@ -13,13 +13,14 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 	
 	var detailViewController: DetailViewController? = nil
 	var managedObjectContext: NSManagedObjectContext? = nil
+	var move = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
 		
-		//self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("goToSettings"))
+		self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("goToSettings"))
 		self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: Selector("edit"))
 		
 		if let split = self.splitViewController {
@@ -29,13 +30,24 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		
 		if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
 			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-			print("Scrolled", appendNewline: true)
+			tableView.contentOffset = CGPointMake(0, 44)
 		}
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		if self.fetchedResultsController.sections![0].numberOfObjects != 0 && move{
+			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+			tableView.contentOffset = CGPointMake(0, 44)
+		} else {
+			move = true
+		}
+		
+		super.viewWillAppear(animated)
 	}
 	
 	func edit() {
@@ -45,11 +57,18 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: Selector("edit"))
 			
 			self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("goToSettings"))
+			
+			if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
+				//self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+				//tableView.contentOffset = CGPointMake(0, 44)
+			}
 		} else {
 			tableView.setEditing(true, animated: true)
 			
 			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: Selector("edit"))
 			self.navigationItem.leftBarButtonItem = nil
+			
+			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
 		}
 	}
 	
@@ -154,7 +173,7 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 	}
 	
 	func goToSettings() {
-		print("Load Settings", appendNewline: true)
+		performSegueWithIdentifier("segueToSettingsView", sender: self)
 	}
 	
 	var fetchedResultsController: NSFetchedResultsController {

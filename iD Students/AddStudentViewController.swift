@@ -14,7 +14,7 @@ class AddStudentViewController: UIViewController, NSFetchedResultsControllerDele
 	var managedObjectContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
 	
 	var newStudentNumber = 0
-	var weekAttended: Week? = nil
+	var weekToAddTo: Week? = nil
 
 	@IBOutlet weak var alertLevelImageView: UIImageView!
 	@IBOutlet weak var alertLevelSegmentedControl: UISegmentedControl!
@@ -84,7 +84,7 @@ class AddStudentViewController: UIViewController, NSFetchedResultsControllerDele
 		newStudent.projectTitle = projectTitleTextField.text
 		newStudent.notes = notesTextView.text
 		newStudent.number = newStudentNumber
-		newStudent.weekAttended = self.weekAttended
+		newStudent.weekAttended = self.weekToAddTo
 		
 		// Save the context.
 		do {

@@ -16,15 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		let splitViewController = self.window!.rootViewController as! UISplitViewController
-		let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
-		navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
-		splitViewController.delegate = self
-		splitViewController.preferredDisplayMode = UISplitViewControllerDisplayMode.AllVisible
-
-		let masterNavigationController = splitViewController.viewControllers[0] as! UINavigationController
-		let controller = masterNavigationController.topViewController as! WeekTableViewController
-		controller.managedObjectContext = self.managedObjectContext
 		return true
 	}
 
@@ -83,8 +74,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 	    let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
 	    let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
 	    var failureReason = "There was an error creating or loading the application's saved data."
+		var fileManager = NSFileManager()
+		
 	    do {
 	        try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+			print("created coordinator", appendNewline: true)
 	    } catch {
 	        // Report any error we got.
 	        var dict = [String: AnyObject]()

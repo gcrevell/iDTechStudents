@@ -30,6 +30,11 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		if let m = maxNumber() {
 			maxStudentNumber = m
 		}
+		
+		if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
+			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+			tableView.contentOffset = CGPointMake(0, 44 * 3)
+		}
 	}
 	
 	func edit() {
@@ -37,14 +42,27 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			tableView.setEditing(false, animated: true)
 			
 			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: Selector("edit"))
+			
+			if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
+				self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+				//tableView.contentOffset = CGPointMake(0, 44 * 3)
+			}
 		} else {
 			tableView.setEditing(true, animated: true)
 			
 			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: Selector("edit"))
+			
+			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+			//tableView.contentOffset = CGPointMake(0, 0)
 		}
 	}
 	
 	override func viewWillAppear(animated: Bool) {
+		if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
+			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+			tableView.contentOffset = CGPointMake(0, 44 * 3)
+		}
+		
 		self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
 		super.viewWillAppear(animated)
 	}
@@ -78,24 +96,27 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "showDetail" {
 			if let indexPath = self.tableView.indexPathForSelectedRow {
-				let object = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)) as! Student
+				let object = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 3, inSection: indexPath.section)) as! Student
 				let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
 				controller.detailItem = object
 				controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
 				controller.navigationItem.leftItemsSupplementBackButton = true
-				
 			}
 		} else if segue.identifier == "addNewStudentSegue" {
 			let controller = segue.destinationViewController as! AddStudentViewController
 			
 			controller.newStudentNumber = maxStudentNumber++
-			controller.weekAttended = currentWeek
+			controller.weekToAddTo = currentWeek
 		} else {
 			print(segue.identifier, appendNewline: true)
 		}
 	}
 	
 	// MARK: - Table View
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+	}
 	
 	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		return self.fetchedResultsController.sections?.count ?? 0
@@ -185,7 +206,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		
-		let predicate = NSPredicate(format: "weekAttended = %@", currentWeek!)
+		let predicate = NSPredicate(format: "(weekAttended = %@)", currentWeek!)
 		
 		fetchRequest.predicate = predicate
 		
@@ -306,6 +327,14 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		}
 		
 		return true
+	}
+	
+	override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+		if proposedDestinationIndexPath.row == 0 || proposedDestinationIndexPath.row == 1 || proposedDestinationIndexPath.row == 2 {
+			return NSIndexPath(forRow: 3, inSection: 0)
+		}
+		
+		return proposedDestinationIndexPath
 	}
 	
 	func maxNumber() -> Int? {
