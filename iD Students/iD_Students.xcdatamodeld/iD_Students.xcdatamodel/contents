@@ -2,16 +2,16 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8118.17" systemVersion="15A178w" minimumToolsVersion="Automatic">
     <entity name="Student" representedClassName="Student" syncable="YES">
         <attribute name="alertStatus" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" minValueString="1" regularExpressionString="^\w+ \w{1}$" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="number" attributeType="Integer 16" minValueString="1" maxValueString="8" syncable="YES"/>
         <attribute name="projectTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="weekAttended" maxCount="1" deletionRule="Nullify" destinationEntity="Week" inverseName="roster" inverseEntity="Week" syncable="YES"/>
     </entity>
     <entity name="Week" representedClassName="Week" syncable="YES">
-        <attribute name="classTaught" attributeType="String" syncable="YES"/>
+        <attribute name="classTaught" attributeType="String" minValueString="1" syncable="YES"/>
         <attribute name="date" attributeType="Date" syncable="YES"/>
-        <attribute name="location" attributeType="String" syncable="YES"/>
+        <attribute name="location" attributeType="String" minValueString="1" syncable="YES"/>
         <attribute name="weekNumber" attributeType="Integer 32" minValueString="1" maxValueString="12" syncable="YES"/>
         <relationship name="roster" optional="YES" toMany="YES" minCount="1" maxCount="8" deletionRule="Cascade" ordered="YES" destinationEntity="Student" inverseName="weekAttended" inverseEntity="Student" syncable="YES"/>
     </entity>

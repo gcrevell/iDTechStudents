@@ -134,21 +134,6 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		}
 	}
 	
-	/*
-	// Override to support rearranging the table view.
-	override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-	
-	}
-	*/
-	
-	/*
-	// Override to support conditional rearranging of the table view.
-	override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-	// Return NO if you do not want the item to be re-orderable.
-	return true
-	}
-	*/
-	
 	// MARK: - Navigation
 	
 	// In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -162,6 +147,10 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 			dest.managedObjectContext = self.managedObjectContext
 			dest.currentWeek = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)) as? Week
 		}
+	}
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		tableView.deselectRowAtIndexPath(indexPath, animated: false)
 	}
 	
 	func goToSettings() {

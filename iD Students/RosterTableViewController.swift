@@ -18,12 +18,9 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
-		//self.navigationItem.leftBarButtonItem = self.editButtonItem()
 		
-		//let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-		//self.navigationItem.rightBarButtonItem = addButton
 		self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: "edit")
+		self.navigationItem.title = "Week \(currentWeek!.weekNumber!) Roster"
 		
 		if let split = self.splitViewController {
 			let controllers = split.viewControllers
@@ -93,6 +90,8 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			
 			controller.newStudentNumber = maxStudentNumber++
 			controller.weekAttended = currentWeek
+		} else {
+			print(segue.identifier, appendNewline: true)
 		}
 	}
 	
@@ -104,7 +103,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		let sectionInfo = self.fetchedResultsController.sections![section]
-		return sectionInfo.numberOfObjects + 1
+		return sectionInfo.numberOfObjects + 3
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -112,8 +111,28 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			let cell = tableView.dequeueReusableCellWithIdentifier("addNewStudentCell", forIndexPath: indexPath)
 			return cell
 		}
+		
+		if indexPath.row == 1 {
+			let cell = tableView.dequeueReusableCellWithIdentifier("basicCell", forIndexPath: indexPath)
+			
+			let dateFormatter = NSDateFormatter()
+			dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			cell.textLabel?.text = "Week of \(dateFormatter.stringFromDate(currentWeek!.date!))"
+			
+			return cell
+		}
+		
+		if indexPath.row == 2 {
+			let cell = tableView.dequeueReusableCellWithIdentifier("basicCell", forIndexPath: indexPath)
+			
+			cell.textLabel?.text = "Taught \(currentWeek!.classTaught!) @ \(currentWeek!.location!)"
+			
+			return cell
+		}
+		
 		let cell = tableView.dequeueReusableCellWithIdentifier("studentCell", forIndexPath: indexPath) as! StudentTableViewCell
-		let student = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)) as! Student
+		let student = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 3, inSection: indexPath.section)) as! Student
 		
 		cell.alertImage.image = alertImage(alertImages(rawValue: Int(student.alertStatus!))!)
 		cell.nameLabel.text = student.name
@@ -125,7 +144,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		// Return false if you do not want the specified item to be editable.
-		if indexPath.row == 0 {
+		if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 {
 			return false
 		}
 		
@@ -134,7 +153,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		if editingStyle == .Delete {
-			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)))
+			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 3, inSection: indexPath.section)))
 			
 			do {
 				try managedObjectContext?.save()
@@ -206,9 +225,9 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 		switch type {
 		case .Insert:
-			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: newIndexPath!.row + 1, inSection: newIndexPath!.section)], withRowAnimation: .Fade)
+			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: newIndexPath!.row + 3, inSection: newIndexPath!.section)], withRowAnimation: .Fade)
 		case .Delete:
-			tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexPath!.row + 1, inSection: indexPath!.section)], withRowAnimation: .Fade)
+			tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexPath!.row + 3, inSection: indexPath!.section)], withRowAnimation: .Fade)
 			
 			for i in (indexPath!.row)..<(maxStudentNumber - 2) {
 				let path = NSIndexPath(forRow: i, inSection: indexPath!.section)
@@ -242,10 +261,10 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		print("Moving", appendNewline: true)
 		
 		if fromIndexPath.row < toIndexPath.row {
-			let stu = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: fromIndexPath.row - 1, inSection: fromIndexPath.section)) as! Student
+			let stu = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: fromIndexPath.row - 3, inSection: fromIndexPath.section)) as! Student
 			var oldNum = stu.number!
 			
-			for i in (fromIndexPath.row)..<(toIndexPath.row) {
+			for i in (fromIndexPath.row - 2)..<(toIndexPath.row - 2) {
 				let path = NSIndexPath(forRow: i, inSection: fromIndexPath.section)
 				let student = self.fetchedResultsController.objectAtIndexPath(path) as! Student
 				let temp = student.number!
@@ -255,10 +274,10 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			
 			stu.number = oldNum
 		} else {
-			let stu = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: fromIndexPath.row - 1, inSection: fromIndexPath.section)) as! Student
+			let stu = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: fromIndexPath.row - 3, inSection: fromIndexPath.section)) as! Student
 			var oldNum = stu.number!
 			
-			for var i = fromIndexPath.row - 1; i >= toIndexPath.row - 1; i-- {
+			for var i = fromIndexPath.row - 3; i >= toIndexPath.row - 3; i-- {
 				let path = NSIndexPath(forRow: i, inSection: fromIndexPath.section)
 				let student = self.fetchedResultsController.objectAtIndexPath(path) as! Student
 				let temp = student.number!
@@ -282,7 +301,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	// Override to support conditional rearranging of the table view.
 	override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		// Return NO if you do not want the item to be re-orderable.
-		if indexPath.row == 0 {
+		if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 {
 			return false
 		}
 		

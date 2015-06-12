@@ -125,13 +125,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
 }
 
+// MARK: Alert Images
+
 /**
-An enumeration for the types of alert images. Raw value correlates to 
+An enumeration for the types of alert images. Raw value correlates to segmented picker values.
+
+0. .green
+1. .blue
+2. .yellow
+3. .red
+
 */
-enum alertImages: Int {
+enum alertImages : Int {
 	case green = 0, blue, yellow, red
 }
 
+
+/**
+A function to return the proper UIImage for a given type from [alertImages](alertImages)
+
+- parameter imageType: An AlertImages Enum value
+
+- returns: A `UIImage` that the given imageType references
+*/
 func alertImage(imageType: alertImages) -> UIImage {
 	switch imageType {
 	case .green :
