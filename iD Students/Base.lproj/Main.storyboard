@@ -797,7 +797,7 @@
                                     <constraint firstAttribute="width" constant="128" id="hHz-q9-Akk"/>
                                 </constraints>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fn3-jL-QJq">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fn3-jL-QJq">
                                 <rect key="frame" x="20" y="208" width="374" height="528"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -810,7 +810,6 @@
                                     </fragment>
                                 </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" calendarEvent="YES"/>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2U6-Qd-CBR">
                                 <rect key="frame" x="156" y="150" width="238" height="49.5"/>
