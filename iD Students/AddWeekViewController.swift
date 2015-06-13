@@ -80,8 +80,7 @@ class AddWeekViewController: UIViewController, NSFetchedResultsControllerDelegat
 				abort()
 			}
 			
-			//performSegueWithIdentifier("unwindToWeekView", sender: self)
-			self.dismissViewControllerAnimated(true, completion: nil)
+			performSegueWithIdentifier("unwindToWeekView", sender: self)
 		}
 	}
 	

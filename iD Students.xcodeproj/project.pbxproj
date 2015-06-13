@@ -138,6 +138,7 @@
 		0300812A1B2A07650092B7C8 /* Table View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0300812C1B2A07860092B7C8 /* Table View Cell Controllers */,
 				0382600F1B2650AE0010C794 /* RosterTableViewController.swift */,
 				033C4C381B267089003F6808 /* WeekTableViewController.swift */,
 			);
@@ -173,12 +174,22 @@
 		0300812E1B2A07A20092B7C8 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0300812A1B2A07650092B7C8 /* Table View Controllers */,
-				0300812B1B2A07790092B7C8 /* Detail View Controllers */,
-				0300812C1B2A07860092B7C8 /* Table View Cell Controllers */,
+				03BED4A81B2AAFF400ACD9DC /* SettingsTableViewController.swift */,
+				03BED4A01B2A93C100ACD9DC /* LoginViewController.swift */,
+				032783E41B2CACDD004E43F8 /* Split View */,
 				0300812D1B2A07950092B7C8 /* Adding View Controllers */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		032783E41B2CACDD004E43F8 /* Split View */ = {
+			isa = PBXGroup;
+			children = (
+				03BED4A21B2A968000ACD9DC /* SplitViewController.swift */,
+				0300812A1B2A07650092B7C8 /* Table View Controllers */,
+				0300812B1B2A07790092B7C8 /* Detail View Controllers */,
+			);
+			name = "Split View";
 			sourceTree = "<group>";
 		};
 		03825FFE1B2650AD0010C794 = {
@@ -211,9 +222,6 @@
 				0382600A1B2650AE0010C794 /* AppDelegate.swift */,
 				038260161B2650AE0010C794 /* Assets.xcassets */,
 				038260131B2650AE0010C794 /* Main.storyboard */,
-				03BED4A81B2AAFF400ACD9DC /* SettingsTableViewController.swift */,
-				03BED4A21B2A968000ACD9DC /* SplitViewController.swift */,
-				03BED4A01B2A93C100ACD9DC /* LoginViewController.swift */,
 				038260181B2650AE0010C794 /* LaunchScreen.storyboard */,
 				033C4C3A1B2678AF003F6808 /* iD_Students.xcdatamodeld */,
 				0382601B1B2650AE0010C794 /* Info.plist */,

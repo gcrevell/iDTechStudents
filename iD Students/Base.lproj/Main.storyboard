@@ -333,11 +333,9 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <segue destination="H1p-Uh-vWS" kind="show" identifier="segueToMainScreen" id="23L-FT-NDe"/>
-                        <segue destination="B86-xw-gXs" kind="unwind" identifier="loginUnwindToWeek" unwindAction="unwindToWeekView:" id="Drv-gY-tmO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Bb-VJ-mlk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="B86-xw-gXs" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-1877" y="-332"/>
         </scene>
@@ -792,25 +790,11 @@
                                 <rect key="frame" x="20" y="72" width="128" height="128"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="3YQ-rB-wEg"/>
+                                    <constraint firstAttribute="height" priority="751" constant="128" id="3YQ-rB-wEg"/>
                                     <constraint firstAttribute="width" secondItem="u6w-aw-IYX" secondAttribute="height" multiplier="1:1" id="cAM-zO-iUt"/>
-                                    <constraint firstAttribute="width" constant="128" id="hHz-q9-Akk"/>
+                                    <constraint firstAttribute="width" priority="751" constant="128" id="hHz-q9-Akk"/>
                                 </constraints>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fn3-jL-QJq">
-                                <rect key="frame" x="20" y="208" width="374" height="528"/>
-                                <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Notes">
-                                        <attributes>
-                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2U6-Qd-CBR">
                                 <rect key="frame" x="156" y="150" width="238" height="49.5"/>
                                 <subviews>
@@ -824,8 +808,8 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Super Über Awesome Game" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CUX-1Q-Qo1">
-                                        <rect key="frame" x="0.0" y="19" width="424" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Super Über Awesome Game" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CUX-1Q-Qo1">
+                                        <rect key="frame" x="0.0" y="19" width="238" height="30"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no"/>
@@ -837,12 +821,18 @@
                                     <constraint firstItem="qCD-A5-6k7" firstAttribute="top" secondItem="2U6-Qd-CBR" secondAttribute="top" id="6vh-pz-LBf"/>
                                     <constraint firstItem="qCD-A5-6k7" firstAttribute="leading" secondItem="2U6-Qd-CBR" secondAttribute="leading" id="NES-Rn-cqA"/>
                                     <constraint firstAttribute="height" constant="49.5" id="QP9-t5-Q6x"/>
+                                    <constraint firstItem="CUX-1Q-Qo1" firstAttribute="top" secondItem="2U6-Qd-CBR" secondAttribute="top" constant="19" id="oCe-Ec-ioG"/>
+                                    <constraint firstItem="CUX-1Q-Qo1" firstAttribute="leading" secondItem="2U6-Qd-CBR" secondAttribute="leading" id="oOG-V7-1bg"/>
+                                    <constraint firstAttribute="trailing" secondItem="CUX-1Q-Qo1" secondAttribute="trailing" id="pOT-FS-OmK"/>
+                                    <constraint firstAttribute="bottom" secondItem="CUX-1Q-Qo1" secondAttribute="bottom" constant="0.5" id="rwd-P9-eyH"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="49.5" id="woz-Do-xdn"/>
                                 </constraints>
                             </view>
                             <segmentedControl opaque="NO" contentMode="center" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cud-Uj-lzC">
                                 <rect key="frame" x="156" y="72" width="238" height="29"/>
                                 <animations/>
                                 <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="175" id="8qr-Lr-OdU"/>
                                     <constraint firstAttribute="height" constant="28" id="wws-Er-MOR"/>
                                 </constraints>
                                 <segments>
@@ -856,6 +846,20 @@
                                     <action selector="segmentedViewValueChanged:" destination="l2I-Vq-hbb" eventType="valueChanged" id="cmG-Bo-n1p"/>
                                 </connections>
                             </segmentedControl>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fn3-jL-QJq">
+                                <rect key="frame" x="20" y="207" width="374" height="528.5"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Notes">
+                                        <attributes>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -866,14 +870,17 @@
                             <constraint firstItem="2U6-Qd-CBR" firstAttribute="leading" secondItem="u6w-aw-IYX" secondAttribute="trailing" constant="8" id="HxX-bF-52g"/>
                             <constraint firstItem="u6w-aw-IYX" firstAttribute="leading" secondItem="7Bx-yw-mU8" secondAttribute="leadingMargin" id="Mu4-UM-rUV"/>
                             <constraint firstItem="Fn3-jL-QJq" firstAttribute="leading" secondItem="7Bx-yw-mU8" secondAttribute="leadingMargin" id="NNM-fC-jxC"/>
-                            <constraint firstItem="2U6-Qd-CBR" firstAttribute="bottom" secondItem="u6w-aw-IYX" secondAttribute="bottom" id="Q1l-14-um7"/>
+                            <constraint firstItem="cud-Uj-lzC" firstAttribute="trailing" secondItem="7Bx-yw-mU8" secondAttribute="trailingMargin" id="Tpy-D0-7lX"/>
                             <constraint firstItem="2U6-Qd-CBR" firstAttribute="trailing" secondItem="7Bx-yw-mU8" secondAttribute="trailingMargin" id="V5E-o8-fE6"/>
+                            <constraint firstItem="Fn3-jL-QJq" firstAttribute="top" secondItem="2U6-Qd-CBR" secondAttribute="bottom" constant="8" id="VNs-sX-Ws5"/>
                             <constraint firstItem="cud-Uj-lzC" firstAttribute="trailing" secondItem="7Bx-yw-mU8" secondAttribute="trailingMargin" id="aBf-0Y-AgM"/>
                             <constraint firstItem="cud-Uj-lzC" firstAttribute="leading" secondItem="u6w-aw-IYX" secondAttribute="trailing" constant="8" id="dWa-cy-Wdi"/>
+                            <constraint firstItem="2U6-Qd-CBR" firstAttribute="bottom" secondItem="u6w-aw-IYX" secondAttribute="bottom" priority="750" id="evg-zH-cFv"/>
+                            <constraint firstItem="2U6-Qd-CBR" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cud-Uj-lzC" secondAttribute="bottom" constant="50" id="iZY-ZM-SkU"/>
                             <constraint firstItem="Fn3-jL-QJq" firstAttribute="trailing" secondItem="7Bx-yw-mU8" secondAttribute="trailingMargin" id="qST-i9-wGU"/>
-                            <constraint firstItem="Fn3-jL-QJq" firstAttribute="top" secondItem="u6w-aw-IYX" secondAttribute="bottom" constant="8" id="u3U-mL-yVk"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="alertImageView" destination="u6w-aw-IYX" id="xaQ-yp-mz5"/>
                         <outlet property="alertLevelPicker" destination="cud-Uj-lzC" id="seH-Yu-h2h"/>
