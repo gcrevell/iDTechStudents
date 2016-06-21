@@ -108,7 +108,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			controller.newStudentNumber = maxStudentNumber++
 			controller.weekToAddTo = currentWeek
 		} else {
-			print(segue.identifier, appendNewline: true)
+			print(segue.identifier)
 		}
 	}
 	
@@ -158,7 +158,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		cell.alertImage.image = alertImage(alertImages(rawValue: Int(student.alertStatus!))!)
 		cell.nameLabel.text = student.name
 		
-		print("Student \(student.name!) is number \(student.number!)", appendNewline: true)
+		print("Student \(student.name!) is number \(student.number!)")
 		
 		return cell
 	}
@@ -174,7 +174,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		if editingStyle == .Delete {
-			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 3, inSection: indexPath.section)))
+			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 3, inSection: indexPath.section)) as! NSManagedObject)
 			
 			do {
 				try managedObjectContext?.save()
@@ -243,7 +243,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 		}
 	}
 	
-	func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+	func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 		switch type {
 		case .Insert:
 			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: newIndexPath!.row + 3, inSection: newIndexPath!.section)], withRowAnimation: .Fade)
@@ -266,7 +266,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 			tableView.reloadData()
 			
 		case .Move:
-			print("Moving", appendNewline: true)
+			print("Moving")
 		}
 	}
 	
@@ -279,7 +279,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 	
 	// Override to support rearranging the table view.
 	override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-		print("Moving", appendNewline: true)
+		print("Moving")
 		
 		if fromIndexPath.row < toIndexPath.row {
 			let stu = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: fromIndexPath.row - 3, inSection: fromIndexPath.section)) as! Student
@@ -302,7 +302,7 @@ class RosterTableViewController: UITableViewController, NSFetchedResultsControll
 				let path = NSIndexPath(forRow: i, inSection: fromIndexPath.section)
 				let student = self.fetchedResultsController.objectAtIndexPath(path) as! Student
 				let temp = student.number!
-				print("Setting \(student.name)'s number to \(oldNum).", appendNewline: true)
+				print("Setting \(student.name)'s number to \(oldNum).")
 				student.number = oldNum
 				oldNum = temp
 			}

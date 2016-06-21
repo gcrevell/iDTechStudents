@@ -11,17 +11,28 @@ import CoreData
 
 class WeekTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 	
+	// MARK: Variables
+	
 	var detailViewController: DetailViewController? = nil
 	var managedObjectContext: NSManagedObjectContext? = nil
-	var move = false
+//	var move = false
+	
+	// MARK: - View
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
 		
-		self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("goToSettings"))
-		self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: Selector("edit"))
+		self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(WeekTableViewController.goToSettings))
+//		self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: #selector(WeekTableViewController.edit))
+		
+		self.navigationItem.rightBarButtonItems = [
+			UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: #selector(WeekTableViewController.edit)),
+			UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+			UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(WeekTableViewController.addNewStudent)),
+			UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+		]
 		
 		if let split = self.splitViewController {
 			let controllers = split.viewControllers
@@ -40,23 +51,32 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 	}
 	
 	override func viewWillAppear(animated: Bool) {
-		if self.fetchedResultsController.sections![0].numberOfObjects != 0 && move{
-			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-			tableView.contentOffset = CGPointMake(0, 44)
-		} else {
-			move = true
-		}
+//		if self.fetchedResultsController.sections![0].numberOfObjects != 0 && move{
+//			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+//			tableView.contentOffset = CGPointMake(0, 44)
+//		} else {
+//			move = true
+//		}
 		
 		super.viewWillAppear(animated)
 	}
+	
+	// MARK: Buttons
 	
 	func edit() {
 		if tableView.editing {
 			tableView.setEditing(false, animated: true)
 			
-			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: Selector("edit"))
+//			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: #selector(WeekTableViewController.edit))
 			
-			self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("goToSettings"))
+			self.navigationItem.rightBarButtonItems = [
+				UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: #selector(WeekTableViewController.edit)),
+				UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+				UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(WeekTableViewController.addNewStudent)),
+				UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+			]
+			
+			self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(WeekTableViewController.goToSettings))
 			
 			if self.fetchedResultsController.sections![0].numberOfObjects != 0 {
 				//self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
@@ -65,11 +85,19 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		} else {
 			tableView.setEditing(true, animated: true)
 			
-			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: Selector("edit"))
+			self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: #selector(WeekTableViewController.edit))
 			self.navigationItem.leftBarButtonItem = nil
 			
 			self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
 		}
+	}
+	
+	func goToSettings() {
+		performSegueWithIdentifier("segueToSettingsView", sender: self)
+	}
+	
+	func addNewStudent() {
+		self.performSegueWithIdentifier("addNewStudentSegue", sender: self)
 	}
 	
 	// MARK: - Table view data source
@@ -80,17 +108,21 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		let sectionInfo = self.fetchedResultsController.sections![section]
-		return sectionInfo.numberOfObjects + 1
+		return sectionInfo.numberOfObjects
+	}
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		tableView.deselectRowAtIndexPath(indexPath, animated: false)
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		
-		print("Row: \(indexPath.row)", appendNewline: true)
+		print("Row: \(indexPath.row)")
 		
-		if indexPath.row == 0 {
-			let cell = tableView.dequeueReusableCellWithIdentifier("addNewWeekCell", forIndexPath: indexPath)
-			return cell
-		}
+//		if indexPath.row == 0 {
+//			let cell = tableView.dequeueReusableCellWithIdentifier("addNewWeekCell", forIndexPath: indexPath)
+//			return cell
+//		}
 		
 		let object = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)) as! Week
 		
@@ -98,7 +130,7 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		
 		let weekNum = object.weekNumber
 		
-		print(weekNum, appendNewline: true)
+		print(weekNum)
 		
 		cell.textLabel?.text = "Week \(weekNum!)"
 		
@@ -113,20 +145,18 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		return cell
 	}
 	
-	// Override to support conditional editing of the table view.
 	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		// Return false if you do not want the specified item to be editable.
 		if indexPath.row == 0 {
-			return false
+//			return false
 		}
 		return true
 	}
 	
-	// Override to support editing the table view.
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		if editingStyle == .Delete {
 			// Delete the row from the data source
-			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)))
+			self.managedObjectContext?.deleteObject(self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)) as! NSManagedObject)
 			
 			do {
 				try managedObjectContext!.save()
@@ -138,7 +168,63 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 		}
 	}
 	
-	func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+	// MARK: - Navigation
+	
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		// Get the new view controller using segue.destinationViewController.
+		// Pass the selected object to the new view controller.
+		if segue.identifier == "loadWeekRoster" {
+			let dest = segue.destinationViewController as! RosterTableViewController
+			let indexPath = self.tableView.indexPathForSelectedRow
+			
+			dest.managedObjectContext = self.managedObjectContext
+			dest.currentWeek = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)) as? Week
+		}
+	}
+	
+	@IBAction func unwindToWeekView(unwindSegue: UIStoryboardSegue) {}
+	
+	// MARK: - Core Data
+	
+	var fetchedResultsController: NSFetchedResultsController {
+		if _fetchedResultsController != nil {
+			return _fetchedResultsController!
+		}
+		
+//		let fetchRequest = NSFetchRequest()
+//		// Edit the entity name as appropriate.
+//		let entity = NSEntityDescription.entityForName("Week", inManagedObjectContext: self.managedObjectContext!)
+//		fetchRequest.entity = entity
+//		
+//		// Set the batch size to a suitable number.
+//		fetchRequest.fetchBatchSize = 20
+//		
+//		// Edit the sort key as appropriate.
+//		let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+//		
+//		fetchRequest.sortDescriptors = [sortDescriptor]
+//		
+//		// Edit the section name key path and cache name if appropriate.
+//		// nil for section name key path means "no sections".
+//		let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
+//		aFetchedResultsController.delegate = self
+//		_fetchedResultsController = aFetchedResultsController
+//		
+//		do {
+//			try _fetchedResultsController!.performFetch()
+//		} catch {
+//			let nserror = error as NSError
+//			NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+//			abort()
+//		}
+		
+		_fetchedResultsController = (UIApplication.sharedApplication().delegate as! AppDelegate).frc
+		
+		return _fetchedResultsController!
+	}
+	var _fetchedResultsController: NSFetchedResultsController? = nil
+	
+	func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 		switch type {
 		case .Insert:
 			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: newIndexPath!.row + 1, inSection: newIndexPath!.section)], withRowAnimation: .Fade)
@@ -152,65 +238,4 @@ class WeekTableViewController: UITableViewController, NSFetchedResultsController
 			tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
 		}
 	}
-	
-	// MARK: - Navigation
-	
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-		// Get the new view controller using segue.destinationViewController.
-		// Pass the selected object to the new view controller.
-		if segue.identifier == "loadWeekRoster" {
-			let dest = segue.destinationViewController as! RosterTableViewController
-			let indexPath = self.tableView.indexPathForSelectedRow
-			
-			dest.managedObjectContext = self.managedObjectContext
-			dest.currentWeek = self.fetchedResultsController.objectAtIndexPath(NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)) as? Week
-		}
-	}
-	
-	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		tableView.deselectRowAtIndexPath(indexPath, animated: false)
-	}
-	
-	func goToSettings() {
-		performSegueWithIdentifier("segueToSettingsView", sender: self)
-	}
-	
-	var fetchedResultsController: NSFetchedResultsController {
-		if _fetchedResultsController != nil {
-			return _fetchedResultsController!
-		}
-		
-		let fetchRequest = NSFetchRequest()
-		// Edit the entity name as appropriate.
-		let entity = NSEntityDescription.entityForName("Week", inManagedObjectContext: self.managedObjectContext!)
-		fetchRequest.entity = entity
-		
-		// Set the batch size to a suitable number.
-		fetchRequest.fetchBatchSize = 20
-		
-		// Edit the sort key as appropriate.
-		let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
-		
-		fetchRequest.sortDescriptors = [sortDescriptor]
-		
-		// Edit the section name key path and cache name if appropriate.
-		// nil for section name key path means "no sections".
-		let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
-		aFetchedResultsController.delegate = self
-		_fetchedResultsController = aFetchedResultsController
-		
-		do {
-			try _fetchedResultsController!.performFetch()
-		} catch {
-			let nserror = error as NSError
-			NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
-			abort()
-		}
-		
-		return _fetchedResultsController!
-	}
-	var _fetchedResultsController: NSFetchedResultsController? = nil
-	
-	@IBAction func unwindToWeekView(unwindSegue: UIStoryboardSegue) {}
 }

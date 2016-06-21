@@ -15,7 +15,7 @@ class EditStudentViewController: UIViewController {
 	@IBOutlet weak var alertLevelPicker: UISegmentedControl!
 	@IBOutlet weak var projectNameTextField: UITextField!
 	@IBOutlet weak var notesTextView: UITextView!
-
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,6 +33,8 @@ class EditStudentViewController: UIViewController {
 		}
 		
 		self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("done"))
+		
+		self
     }
 
     override func didReceiveMemoryWarning() {

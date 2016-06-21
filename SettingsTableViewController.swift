@@ -59,7 +59,7 @@ class SettingsTableViewController: UITableViewController, UIAlertViewDelegate {
 		}
 		
 		if indexPath.row == 0 && indexPath.section == 1 {
-			//Delete all data
+			// Delete all data
 			let alert = UIAlertController(title: "Are you sure?", message: "You are about to permanently delete all data. Are you sure you want to do this?", preferredStyle: UIAlertControllerStyle.Alert)
 			alert.addAction(UIAlertAction(title: "DELETE", style: UIAlertActionStyle.Destructive, handler: { (UIAlertAction) -> Void in
 				let fetchrequest = NSFetchRequest(entityName: "Week")
@@ -70,7 +70,7 @@ class SettingsTableViewController: UITableViewController, UIAlertViewDelegate {
 					try fetchedObject = ((UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.executeFetchRequest(fetchrequest)) as! [Week]
 					
 					for val in fetchedObject! {
-						print("Deleting", appendNewline: true)
+						print("Deleting")
 						(UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.deleteObject(val)
 					}
 					

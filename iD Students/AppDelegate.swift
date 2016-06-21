@@ -10,12 +10,41 @@ import UIKit
 import CoreData
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, NSFetchedResultsControllerDelegate {
 	
 	var window: UIWindow?
 	var display = true
+	var frc: NSFetchedResultsController = NSFetchedResultsController()
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		
+		let fetchRequest = NSFetchRequest()
+		// Edit the entity name as appropriate.
+		let entity = NSEntityDescription.entityForName("Week", inManagedObjectContext: self.managedObjectContext)
+		fetchRequest.entity = entity
+		
+		// Set the batch size to a suitable number.
+		fetchRequest.fetchBatchSize = 20
+		
+		// Edit the sort key as appropriate.
+		let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+		
+		fetchRequest.sortDescriptors = [sortDescriptor]
+		
+		// Edit the section name key path and cache name if appropriate.
+		// nil for section name key path means "no sections".
+		let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+		aFetchedResultsController.delegate = self
+		frc = aFetchedResultsController
+		
+		do {
+			try frc.performFetch()
+		} catch {
+			let nserror = error as NSError
+			NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+			abort()
+		}
+		
 		return true
 	}
 	
@@ -31,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 	
 	func applicationWillEnterForeground(application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-		print("Foreground", appendNewline: true)
+		print("Foreground")
 		/*
 		if display {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -45,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 	
 	func applicationDidBecomeActive(application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-		print("active", appendNewline: true)
+		print("active")
 	}
 	
 	func applicationWillTerminate(application: UIApplication) {
@@ -53,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 		// Saves changes in the application's managed object context before the application terminates.
 		self.saveContext()
 		display = false
-		print("terminate", appendNewline: true)
+		print("terminate")
 	}
 	
 	// MARK: - Split view
@@ -91,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 		
 		do {
 			try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
-			print("created coordinator", appendNewline: true)
+			print("created coordinator")
 		} catch {
 			// Report any error we got.
 			var dict = [String: AnyObject]()

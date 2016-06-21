@@ -33,12 +33,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertViewDel
 		if password == nil {
 			var text = ""
 			do {
-				try context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics)
+				context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: nil)
+				//try context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics)
 				text = " After this time you will be able to login with Touch ID."
 			} catch {
-				print("Unable to authenticate user", appendNewline: true)
-				print(error, appendNewline: true)
+				print("Unable to authenticate user")
+				print(error)
 			}
+			
 			
 			let alert = UIAlertView(title: "Please enter a password", message: "Please enter a password to protect your data.\(text)", delegate: self, cancelButtonTitle: "Done")
 			alert.alertViewStyle = UIAlertViewStyle.SecureTextInput
@@ -47,35 +49,35 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertViewDel
 		} else if defaults.valueForKey("USETOUCHID") as! Bool {
 			
 			do {
-				try context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics)
+				context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: nil)
 				
-				//This line will probably break in the future as it still uses the old NSError
+				// This line will probably break in the future as it still uses the old NSError
 				context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: "Please sign in to view your students private information", reply: { (success: Bool, error: NSError?) in
 					if success {
 						self.performSegueWithIdentifier("segueToMainScreen", sender: self)
 						return
 					} else {
-						print(error?.localizedDescription, appendNewline: true)
+						print(error?.localizedDescription)
 						
 						switch error!.code {
 							
 						case LAError.SystemCancel.rawValue:
-							print("Authentication was cancelled by the system", appendNewline: true)
+							print("Authentication was cancelled by the system")
 							
 						case LAError.UserCancel.rawValue:
-							print("Authentication was cancelled by the user", appendNewline: true)
+							print("Authentication was cancelled by the user")
 							
 						case LAError.UserFallback.rawValue:
-							print("User selected to enter custom password", appendNewline: true)
+							print("User selected to enter custom password")
 							
 						default:
-							print("Authentication failed", appendNewline: true)
+							print("Authentication failed")
 						}
 					}
 				})
 			} catch {
-				print("Unable to authenticate user", appendNewline: true)
-				print(error, appendNewline: true)
+				print("Unable to authenticate user")
+				print(error)
 			}
 		}
 	}
